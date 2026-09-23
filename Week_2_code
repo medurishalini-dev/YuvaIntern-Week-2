@@ -1,0 +1,98 @@
+# ============================================================
+# Yuva Intern - Week 2
+# Data Visualization and Insight Communication using R
+# Dataset: Iris (built-in R datasets package)
+# ============================================================
+
+# Install ggplot2 once if it is not already installed:
+# install.packages("ggplot2")
+
+library(ggplot2)
+
+# -----------------------------
+# 1. Load and inspect the data
+# -----------------------------
+data(iris)
+
+dim(iris)
+str(iris)
+summary(iris)
+colSums(is.na(iris))
+
+# -----------------------------
+# 2. Average sepal length
+# -----------------------------
+ggplot(iris, aes(x = Species, y = Sepal.Length)) +
+  stat_summary(fun = mean, geom = "bar") +
+  stat_summary(fun = mean, geom = "text",
+               aes(label = round(after_stat(y), 2)),
+               vjust = -0.4) +
+  labs(
+    title = "Average Sepal Length by Iris Species",
+    x = "Species",
+    y = "Average sepal length (cm)"
+  ) +
+  theme_minimal()
+
+# -----------------------------
+# 3. Petal relationship
+# -----------------------------
+ggplot(iris, aes(x = Petal.Length, y = Petal.Width,
+                 color = Species)) +
+  geom_point(size = 2.5, alpha = 0.75) +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "Petal Length vs Petal Width",
+    x = "Petal length (cm)",
+    y = "Petal width (cm)",
+    color = "Species"
+  ) +
+  theme_minimal()
+
+# -----------------------------
+# 4. Petal length distribution
+# -----------------------------
+ggplot(iris, aes(x = Petal.Length)) +
+  geom_histogram(bins = 12, color = "black") +
+  labs(
+    title = "Distribution of Petal Length",
+    x = "Petal length (cm)",
+    y = "Number of flowers"
+  ) +
+  theme_minimal()
+
+# -----------------------------
+# 5. Sepal width variability
+# -----------------------------
+ggplot(iris, aes(x = Species, y = Sepal.Width)) +
+  geom_boxplot() +
+  labs(
+    title = "Sepal Width Distribution by Species",
+    x = "Species",
+    y = "Sepal width (cm)"
+  ) +
+  theme_minimal()
+
+# -----------------------------
+# 6. Sequential observation plot
+# -----------------------------
+iris$Observation <- seq_len(nrow(iris))
+
+ggplot(iris, aes(x = Observation, y = Petal.Length)) +
+  geom_line() +
+  geom_vline(xintercept = c(50.5, 100.5), linetype = "dashed") +
+  labs(
+    title = "Petal Length Across the 150 Observations",
+    x = "Observation number (dataset order)",
+    y = "Petal length (cm)"
+  ) +
+  theme_minimal()
+
+# -----------------------------
+# Optional: save plots
+# -----------------------------
+# ggsave("bar_average_sepal_length.png", width = 8, height = 5, dpi = 300)
+# ggsave("scatter_petal_relationship.png", width = 8, height = 5, dpi = 300)
+# ggsave("histogram_petal_length.png", width = 8, height = 5, dpi = 300)
+# ggsave("boxplot_sepal_width.png", width = 8, height = 5, dpi = 300)
+# ggsave("line_petal_length_observations.png", width = 8, height = 5, dpi = 300)
